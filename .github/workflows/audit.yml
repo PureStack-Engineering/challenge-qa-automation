@@ -13,7 +13,8 @@ jobs:
           cache: 'npm'
           
       - name: Install Dependencies
-        run: npm ci
+        # CAMBIO: Usamos 'install' en lugar de 'ci' para que genere el lockfile si no existe
+        run: npm install
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
