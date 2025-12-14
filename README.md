@@ -1,62 +1,87 @@
 # 🕷️ PureStack QA Automation Challenge: The Bug Hunter
 
-PureStack.es - Engineering. Validated by Code.
-
-### Context
-Welcome to the **PureStack Technical Validation Protocol** for QA Engineers / SDET.
-We don't accept "flaky" tests. We expect robust, maintainable automation code using the **Page Object Model (POM)** pattern.
-
-**⚠️ The Scenario:** You need to automate a purchase flow on the training site `https://www.saucedemo.com/`.
+**PureStack.es - Engineering Validation Protocol.**
+> *"We don't accept flaky tests. We build robust Automation Ecosystems."*
 
 ---
 
-### 🎯 The Objective
-Using **Playwright + TypeScript**, implement an automated test suite that covers this User Journey:
+### 📋 Context & Mission
+Welcome to the PureStack Technical Validation Protocol for QA Engineers / SDET.
+In modern engineering, QA is not about "record and playback". It's about building scalable, maintainable, and deterministic automation code.
 
-1.  **Login:**
-    * User: `standard_user`
-    * Pass: `secret_sauce`
-2.  **Add to Cart:**
-    * Add the product "Sauce Labs Backpack" to the cart.
-3.  **Checkout Validation:**
-    * Go to the cart.
-    * **Assert** that the item name is correct.
-    * **Assert** that the price is `$29.99`.
+**The Mission:** You need to automate a critical purchase flow on `https://www.saucedemo.com/`.
+**The Standard:** We expect strict adherence to the **Page Object Model (POM)** pattern.
+
+### 🚦 Certification Levels (Choose your Difficulty)
+Your seniority is defined by the robustness and architecture of your suite. State your target level in your Pull Request.
+
+#### 🥉 Level 3: Essential / Mid-Level
+* **Focus:** POM & Resilience.
+* **Requirement:** Automate the standard "Happy Path" using Page Objects.
+* **Tasks:**
+    1.  **Login:** User `standard_user` / `secret_sauce`.
+    2.  **Add to Cart:** Add "Sauce Labs Backpack".
+    3.  **Checkout Validation:** Navigate to cart and **Assert** that the item name is correct and price is `$29.99`.
+    4.  **Resilience:** Use stable locators (e.g., `data-test` attributes, `getByRole`) instead of fragile XPaths or CSS selectors coupled to styles.
+* **Deliverable:** A clean test that passes in Headless mode using POM classes.
+
+#### 🥈 Level 2: Pro / Senior
+* **Focus:** Data-Driven Testing & Debugging.
+* **Requirement:** Everything in Level 3 + **Parametrization & Artifacts**.
+* **Extra Tasks:**
+    1.  **Data-Driven:** Refactor the test to run with **multiple items**. Create a data fixture (JSON or array) so the same test runs for "Sauce Labs Backpack" AND "Sauce Labs Bike Light" without code duplication.
+    2.  **Failure Analysis:** Configure `playwright.config.ts` to capture **Screenshots** and **Video** *only* on test failure.
+    3.  **Strict Typing:** Ensure all your Page Object methods use proper TypeScript types (no `any`).
+* **Deliverable:** A scalable suite that handles multiple data inputs and provides debugging context.
+
+#### 🥇 Level 1: Elite / Architect
+* **Focus:** Efficiency, Optimization & Network Control.
+* **Requirement:** Everything above + **Global Setup & Network Interception**.
+* **Extra Tasks:**
+    1.  **Authentication Reuse:** Implement **Global Setup** or `storageState`. The login should happen *once* (or be bypassed via cookie injection), saving the state so subsequent tests don't need to perform the UI login steps every time.
+    2.  **Network Interception:** Use Playwright's `route` capability to block unnecessary resources (e.g., images or analytics) to speed up execution, OR mock a network response to simulate a specific state.
+* **Deliverable:** An ultra-fast, optimized test architecture designed for high-concurrency CI/CD pipelines.
+
+---
 
 ### 🛠️ Tech Stack Requirements
 * **Framework:** Playwright.
 * **Language:** TypeScript.
-* **Pattern:** **Page Object Model (POM)** is MANDATORY. Do not dump all selectors in the test file.
+* **Pattern:** **Page Object Model (POM)** is MANDATORY. Do not dump all selectors in the test file (`shop.spec.ts`).
 * **Reporting:** Standard HTML Report.
-
-## 🧪 Evaluation Criteria (How we audit you)
-
-We will clone your repo and run `npm test`. We look for:
-
-- **Green Lights:** The test must pass in **Headless** mode.
-- **Architecture:** Did you use classes for your Pages (`src/pages/`)?
-- **Selectors:** Are you using resilient locators (e.g., `data-test`) instead of fragile XPaths?
-
-## 🚀 Getting Started
-
-1. Use this template.
-2. Install dependencies: `npm ci & npx playwright install --with-deps`.
-3. Define your Page Objects in `src/pages/`.
-4. Write the test logic in `src/tests/shop.spec.ts`.
-5. Run locally: `npx playwright test`.
 
 ---
 
-### 🚨 CRITICAL: Project Structure
+### 🚀 Execution Instructions
+
+1.  **Use this template** (Fork the repo).
+2.  Install dependencies: `npm ci && npx playwright install --with-deps`.
+3.  Define your Page Objects in `src/pages/`.
+4.  Write the test logic in `src/tests/shop.spec.ts`.
+5.  Run locally: `npx playwright test`.
+6.  Submit via **Pull Request** stating your target Level.
+
+### 🧪 Evaluation Criteria (PureStack Audit)
+
+| Criteria | Weight | Audit Focus |
+| :--- | :--- | :--- |
+| **Robustness** | 35% | Does the test pass consistently? Are locators resilient? |
+| **Architecture (POM)** | 30% | Are pages cleanly separated from test logic? Is code reusable? |
+| **TypeScript** | 20% | Proper usage of types, interfaces, and async/await. |
+| **Configuration** | 15% | Correct setup of reporting, timeouts, and artifacts (Level 2/1). |
+
+---
+
+### 🚨 Project Structure (Standard)
 To ensure our **Automated Auditor** works, keep this structure:
 
 ```text
 /
-├── .github/workflows/   # PureStack Audit System
+├── .github/workflows/   # PureStack Audit System (DO NOT TOUCH)
 ├── src/
-│   ├── pages/           # <--- PAGE OBJECTS GO HERE (LoginPage, InventoryPage...)
+│   ├── pages/           # <--- PAGE OBJECTS (LoginPage.ts, InventoryPage.ts...)
 │   └── tests/
 │       └── shop.spec.ts # <--- YOUR TESTS GO HERE
-├── playwright.config.ts
+├── playwright.config.ts # <--- Config (Timeouts, Reporters, Global Setup)
 ├── package.json
 └── README.md
