@@ -1,5 +1,7 @@
 # 🕷️ PureStack QA Automation Challenge: The Bug Hunter
 
+PureStack.es - Engineering. Validated by Code.
+
 ### Context
 Welcome to the **PureStack Technical Validation Protocol** for QA Engineers / SDET.
 We don't accept "flaky" tests. We expect robust, maintainable automation code using the **Page Object Model (POM)** pattern.
