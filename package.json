@@ -2,8 +2,7 @@
   "name": "purestack-qa-challenge",
   "version": "1.0.0",
   "scripts": {
-    "test": "playwright test",
-    "report": "playwright show-report"
+    "test": "npx playwright test"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",
