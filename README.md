@@ -77,11 +77,16 @@ To ensure our **Automated Auditor** works, keep this structure:
 
 ```text
 /
-├── .github/workflows/   # PureStack Audit System (DO NOT TOUCH)
+├── .github/
+│   └── workflows/
+│       └── audit.yml            # CI Pipeline (Runs 'npx playwright test')
 ├── src/
-│   ├── pages/           # <--- PAGE OBJECTS (LoginPage.ts, InventoryPage.ts...)
+│   ├── pages/
+│   │   ├── LoginPage.ts         # Page Object: Encapsulates Login selectors & logic
+│   │   └── InventoryPage.ts     # Page Object: Encapsulates Product list logic
 │   └── tests/
-│       └── shop.spec.ts # <--- YOUR TESTS GO HERE
-├── playwright.config.ts # <--- Config (Timeouts, Reporters, Global Setup)
-├── package.json
-└── README.md
+│       └── shop.spec.ts         # The actual Test Scenario (Login -> Shop -> Checkout)
+├── playwright.config.ts         # Playwright Configuration (BaseURL, Timeouts, Headless)
+├── package.json                 # Dependencies (Playwright, TypeScript)
+├── package-lock.json            # Exact versions lock file
+└── README.md                    # Instructions
