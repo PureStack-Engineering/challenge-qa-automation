@@ -10,8 +10,6 @@ export default defineConfig({
   use: {
     baseURL: 'https://www.saucedemo.com',
     trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
-    headless: true,
   },
   projects: [
     {
