@@ -1,15 +1,11 @@
 import { test, expect } from '@playwright/test';
-// TODO: Import your Page Objects here
+import { LoginPage } from '../pages/LoginPage';
 
-test.describe('SauceDemo Shopping Flow', () => {
-  
-  test('should allow a user to buy a backpack', async ({ page }) => {
-    // TODO: Implement the test using Page Object Model
-    // 1. Login
-    // 2. Add Backpack
-    // 3. Verify Price in Cart
+test('Sanity Check: Swag Labs loads correctly', async ({ page }) => {
+    // This test ensures the environment is ready.
+    const login = new LoginPage(page);
+    await login.goto();
     
-    // Hint: await loginPage.login('standard_user', 'secret_sauce');
-  });
-
+    // Check if the title is correct
+    await expect(page).toHaveTitle(/Swag Labs/);
 });
