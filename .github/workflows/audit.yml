@@ -16,10 +16,10 @@ jobs:
     - name: 📥 Checkout Code
       uses: actions/checkout@v4
 
-    - name: 🔍 Phase 1: Structural Integrity (POM Check)
+    - name: 🔍 Phase 1 Structural Integrity
       run: |
         echo "::group::Structure Validation"
-        # 1. Check if Pages folder exists and contains strict files
+        # 1. Check if Pages folder exists and contains strict files (POM Enforcement)
         if [ ! -f "src/pages/LoginPage.ts" ]; then echo "❌ Missing POM: LoginPage.ts not found in src/pages/"; exit 1; fi
         if [ ! -f "src/pages/InventoryPage.ts" ]; then echo "❌ Missing POM: InventoryPage.ts not found in src/pages/"; exit 1; fi
         
@@ -38,26 +38,17 @@ jobs:
     - name: 📦 Install Dependencies
       run: npm ci
 
-    - name: 🕵️ Phase 2: Anti-Pattern Detection (Strict)
+    - name: 🕵️ Phase 2 Anti-Pattern Detection
       run: |
         echo "::group::Static Code Analysis"
         # Ban Hard Waits (Crucial for robust automation)
-        if grep -r "waitForTimeout" src/; then
-          echo "❌ CRITICAL: 'page.waitForTimeout' detected. Use explicit waits (toBeVisible) instead."
-          exit 1
-        fi
+        if grep -r "waitForTimeout" src/; then echo "❌ CRITICAL: 'page.waitForTimeout' detected. Use explicit waits (toBeVisible) instead."; exit 1; fi
         
         # Ban Debugging leftovers
-        if grep -r "page.pause()" src/; then
-          echo "❌ CRITICAL: 'page.pause()' detected. Remove debugging code."
-          exit 1
-        fi
+        if grep -r "page.pause()" src/; then echo "❌ CRITICAL: 'page.pause()' detected. Remove debugging code."; exit 1; fi
         
         # Ban .only (Don't merge focused tests)
-        if grep -r "\.only" src/tests/; then
-          echo "❌ CRITICAL: 'test.only' detected. Do not commit focused tests."
-          exit 1
-        fi
+        if grep -r "\.only" src/tests/; then echo "❌ CRITICAL: 'test.only' detected. Do not commit focused tests."; exit 1; fi
         
         echo "✅ Code is clean of major automation anti-patterns."
         echo "::endgroup::"
@@ -65,7 +56,7 @@ jobs:
     - name: 🎭 Install Playwright Browsers
       run: npx playwright install --with-deps chromium
 
-    - name: 🧪 Phase 3: Execution (Headless)
+    - name: 🧪 Phase 3 Execution
       run: npx playwright test
 
     - name: 📊 Upload Report
