@@ -1,4 +1,4 @@
-import { type Page } from '@playwright/test';
+import { type Page, type Locator } from '@playwright/test';
 
 export class LoginPage {
     readonly page: Page;
@@ -8,9 +8,10 @@ export class LoginPage {
     }
 
     async goto() {
-        await this.page.goto('/');
+        // TODO: Go to base url
     }
 
-    // TODO: Candidate must implement login logic here
-    // async login(user: string, pass: string) { ... }
+    async login(user: string, pass: string) {
+        // TODO: Implement login logic
+    }
 }
