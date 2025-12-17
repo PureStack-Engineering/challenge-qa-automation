@@ -7,21 +7,69 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  audit-playwright:
     timeout-minutes: 10
     runs-on: ubuntu-latest
+    name: 🕷️ QA Quality Gate
+
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+
+    - name: 🔍 Phase 1: Structural Integrity (POM Check)
+      run: |
+        echo "::group::Structure Validation"
+        # 1. Check if Pages folder exists and contains strict files
+        if [ ! -f "src/pages/LoginPage.ts" ]; then echo "❌ Missing POM: LoginPage.ts not found in src/pages/"; exit 1; fi
+        if [ ! -f "src/pages/InventoryPage.ts" ]; then echo "❌ Missing POM: InventoryPage.ts not found in src/pages/"; exit 1; fi
+        
+        # 2. Check if Spec file exists in the right place
+        if [ ! -f "src/tests/shop.spec.ts" ]; then echo "❌ Missing Test: shop.spec.ts not found in src/tests/"; exit 1; fi
+        
+        echo "✅ POM Structure & File placement seems valid."
+        echo "::endgroup::"
+
+    - name: 🔧 Setup Node.js
+      uses: actions/setup-node@v4
       with:
         node-version: 18
-    - name: Install dependencies
-      run: npm install
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    - name: Run Playwright tests
+        cache: 'npm'
+
+    - name: 📦 Install Dependencies
+      run: npm ci
+
+    - name: 🕵️ Phase 2: Anti-Pattern Detection (Strict)
+      run: |
+        echo "::group::Static Code Analysis"
+        # Ban Hard Waits (Crucial for robust automation)
+        if grep -r "waitForTimeout" src/; then
+          echo "❌ CRITICAL: 'page.waitForTimeout' detected. Use explicit waits (toBeVisible) instead."
+          exit 1
+        fi
+        
+        # Ban Debugging leftovers
+        if grep -r "page.pause()" src/; then
+          echo "❌ CRITICAL: 'page.pause()' detected. Remove debugging code."
+          exit 1
+        fi
+        
+        # Ban .only (Don't merge focused tests)
+        if grep -r "\.only" src/tests/; then
+          echo "❌ CRITICAL: 'test.only' detected. Do not commit focused tests."
+          exit 1
+        fi
+        
+        echo "✅ Code is clean of major automation anti-patterns."
+        echo "::endgroup::"
+
+    - name: 🎭 Install Playwright Browsers
+      run: npx playwright install --with-deps chromium
+
+    - name: 🧪 Phase 3: Execution (Headless)
       run: npx playwright test
-    - uses: actions/upload-artifact@v4
+
+    - name: 📊 Upload Report
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: playwright-report
