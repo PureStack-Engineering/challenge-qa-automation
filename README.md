@@ -71,6 +71,21 @@ Your seniority is defined by the robustness and architecture of your suite. Stat
 
 > **Note:** The `playwright.config.ts` is pre-configured to look for tests in `src/tests`. Do not move the folder structure.
 
+---
+
+### 📝 Audit & Validation Rules (Strict)
+
+> **⚠️ The "No-Flakiness" Policy**
+>
+> Our automated auditor (`audit.yml`) enforces strict quality rules. Your PR will be automatically rejected if:
+>
+> 1.  **Structure Violation:** You do not follow the folder structure `src/pages/` and `src/tests/`.
+> 2.  **Hard Waits:** The use of `page.waitForTimeout()` is **strictly forbidden**. You must use smart assertions (e.g., `expect(locator).toBeVisible()`).
+> 3.  **Debug Leftovers:** Remove any `test.only`, `page.pause()`, or `console.log` before pushing.
+> 4.  **Execution:** Tests must pass in Headless mode on GitHub Actions.
+
+---
+
 ### 🧪 Evaluation Criteria (PureStack Audit)
 
 | Criteria | Weight | Audit Focus |
