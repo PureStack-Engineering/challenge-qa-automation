@@ -1,12 +1,13 @@
 {
   "name": "purestack-qa-challenge",
   "version": "1.0.0",
+  "description": "PureStack QA Automation Challenge",
   "scripts": {
     "test": "npx playwright test"
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.0",
+    "@playwright/test": "^1.40.1",
     "@types/node": "^20.10.0",
-    "typescript": "^5.3.0"
+    "typescript": "^5.3.3"
   }
 }
